@@ -56,4 +56,4 @@ backend/gallery/*
 backend/thumbnails/*
 
 SQLite.sql
-dlust.db
+*.db
