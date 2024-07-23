@@ -1,0 +1,16 @@
+.card {
+    overflow: hidden; /* Ensure content doesn’t overflow */
+    position: relative; /* For containing child elements */
+  }
+
+  .card-img-wrapper {
+    overflow: hidden; /* Hide overflow content */
+  }
+
+  .card-img-top {
+    transition: transform 0.3s ease; /* Smooth zoom effect */
+  }
+
+  .card:hover .card-img-top {
+    transform: scale(1.1); /* Zoom in on hover */
+  }

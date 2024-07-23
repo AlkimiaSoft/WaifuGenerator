@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Image App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .option-image {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h3>Hair Type:</h3>
+        <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairType" value="straight"> Straight
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairType" value="curly"> Curly
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairType" value="wavy"> Wavy
+            </label>
+        </div>
+
+        <h3 class="mt-3">Hair Color:</h3>
+        <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairColor" value="blonde"> Blonde
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairColor" value="brunette"> Brunette
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairColor" value="black"> Black
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="hairColor" value="red"> Red
+            </label>
+        </div>
+
+        <h3 class="mt-3">Eye Color:</h3>
+        <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="eyeColor" value="blue"> Blue
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="eyeColor" value="green"> Green
+            </label>
+            <label class="btn btn-outline-primary">
+                <input type="radio" name="eyeColor" value="brown"> Brown
+            </label>
+        </div>
+
+        <button class="btn btn-primary mt-3" onclick="generateImage()">Generate Image</button>
+        <div id="imageContainer" class="mt-3"></div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery (required for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

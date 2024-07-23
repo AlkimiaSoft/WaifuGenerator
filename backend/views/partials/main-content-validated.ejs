@@ -1,0 +1,26 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex justify-content-center pt-3 pb-2 mb-3 border-bottom">
+    <h1>Congratulations!</h1>
+  </div>
+  <div class="text-center">
+    <p class="lead">Your account has been validated successfully!</p>
+    <% if (isAuthenticated) { %>
+      <p>Now you can start creating amazing characters and manage your creations from your dashboard.</p>
+      <div class="mt-4">
+        <a href="/creator" class="btn btn-primary btn-lg me-2">
+          <i class="bi bi-palette"></i> Start Creating Characters
+        </a>
+        <a href="/dashboard" class="btn btn-secondary btn-lg">
+          <i class="bi bi-speedometer2"></i> Go to Dashboard
+        </a>
+      </div>
+    <% } else { %>
+      <p>Please log in to start creating characters and access your dashboard.</p>
+      <div class="mt-4">
+        <a href="/login" class="btn btn-primary btn-lg">
+          <i class="bi bi-box-arrow-in-right"></i> Login
+        </a>
+      </div>
+    <% } %>
+  </div>
+</main>

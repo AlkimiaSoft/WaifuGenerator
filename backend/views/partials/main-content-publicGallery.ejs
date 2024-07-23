@@ -1,0 +1,122 @@
+<style>
+  .card {
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .card-img-top {
+    object-fit: cover;
+  }
+
+  .card-link {
+    display: block;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .overlay.liked,
+  .overlay:hover {
+    background-color: rgba(255, 0, 0, 0.7);
+    transform: scale(1.1);
+  }
+
+  .overlay .heart-icon {
+    margin-right: 5px;
+  }
+</style>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex pt-3 pb-2 mb-3 border-bottom">
+    <h1>Public Gallery</h1>
+  </div>
+  <div class="d-flex justify-content-end mb-3">
+    <form class="d-flex align-items-center">
+      <div class="me-3">
+        <label for="sortField" class="me-2 mb-0">Sort by:</label>
+        <select class="form-select" id="sortField" name="sortField" onchange="this.form.submit()">
+          <option value="creationTime" <%= sortField === 'creationTime' ? 'selected' : '' %>>Date</option>
+          <option value="likes" <%= sortField === 'likes' ? 'selected' : '' %>>Likes</option>
+        </select>
+      </div>
+      <div>
+        <label for="sortOrder" class="me-2 mb-0">Order:</label>
+        <select class="form-select" id="sortOrder" name="sortOrder" onchange="this.form.submit()">
+          <option value="asc" <%= sortOrder === 'asc' ? 'selected' : '' %>>Ascending</option>
+          <option value="desc" <%= sortOrder === 'desc' ? 'selected' : '' %>>Descending</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6">
+    <% creations.forEach(function(creation) { %>
+      <div class="col mb-4">
+        <div class="card">
+          <a href="/creations/<%= creation.id %>" class="card-link">
+            <div class="card-img-wrapper">
+              <img src="<%= creation.thumbnailUrl %>" class="card-img-top" alt="Image">
+              <div class="overlay <%= creation.isLiked ? 'liked' : '' %>" data-creation-id="<%= creation.id %>">
+                <span class="heart-icon">&hearts;</span>
+                <span class="like-count"><%= creation.likes %></span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.overlay').forEach(function (overlay) {
+      overlay.addEventListener('click', function (event) {
+        event.preventDefault();
+        var creationId = this.getAttribute('data-creation-id');
+        var likeCountElem = this.querySelector('.like-count');
+        var currentLikes = parseInt(likeCountElem.textContent);
+        var isLiked = this.classList.contains('liked');
+
+
+        // Make fetch request to backend to like or unlike the image
+        fetch('/likeCreation', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id: creationId })
+        })
+        .then(response => {
+            if (response.status === 200) {
+              return response.json().then(data => {
+                // Update the like count on success
+                likeCountElem.textContent = data.likes;
+                if (isLiked)
+                  this.classList.remove('liked');
+                else
+                  this.classList.add('liked');
+                // Show notification with the response message
+              });
+            } else {
+              console.error('Error liking creation:', response.statusText);
+            }
+          })
+          .catch(error => {
+            console.error('Error liking creation:', error);
+          });
+      });
+    });
+  });
+</script>

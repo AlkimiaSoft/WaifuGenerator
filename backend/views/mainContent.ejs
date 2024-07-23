@@ -1,0 +1,5 @@
+<% if (activePage === 'creator') { %>
+    <%- include('layout', { isAuthenticated: isAuthenticated, mainPartial: mainPartial, waifuName: waifuName }) %>
+  <% } else { %>
+    <%- include('layout', { isAuthenticated: isAuthenticated, mainPartial: mainPartial}) %>
+  <% } %>

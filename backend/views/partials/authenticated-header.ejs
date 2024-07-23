@@ -1,0 +1,20 @@
+  <div class="dropdown text-end">
+    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+      aria-expanded="false">
+      <% if (user.avatarUrl) { %>
+        <img src="<%= user.avatarUrl %>" alt="user" width="40" height="40" class="rounded-circle">
+      <% } else { %>
+        <img src="/assets/avatarPlaceholder.jpg" alt="user" width="40" height="40" class="rounded-circle">
+      <% } %>
+      
+    </a>
+    <ul class="dropdown-menu text-small">
+      <li><a class="dropdown-item" href="/creator">New creation</a></li>
+      <!-- <li><a class="dropdown-item" href="/profile">Profile</a></li> -->
+      <li>
+        <hr class="dropdown-divider">
+      </li>
+      <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+    </ul>
+  </div>
+

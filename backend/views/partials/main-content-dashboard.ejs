@@ -1,0 +1,29 @@
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex  pt-3 pb-2 mb-3 border-bottom">
+    <h1>DASHBOARD</h1>
+  </div>
+  <h2>welcome <%= user.displayName %>
+  </h2>
+  <p> You have <%= user.remainingCreations %> creations left!</p>
+
+  <% if (user.userVerified) { %>
+    <h3> Your last Creations:</h3>
+    <div class="row">
+      <% creations.forEach(function(creation) { %>
+        <div class="col-md-2 mb-2">
+          <div class="card">
+            <a href="/creations/<%= creation.id %>" class="card-link">
+              <div class="card-img-wrapper">
+                <img src="<%= creation.thumbnailUrl %>" class="card-img-top" alt="Image">
+              </div>
+            </a>
+          </div>
+        </div>
+        <% }); %>
+    </div>
+    <% } else { %>
+      <h3 class="text-danger"> You have to validate your email address to start creating some characters!</h3>
+      <% } %>
+
+
+</main>
