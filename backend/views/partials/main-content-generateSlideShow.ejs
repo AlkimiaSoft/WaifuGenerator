@@ -1,0 +1,106 @@
+<style>
+  .card {
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .card-img-top {
+    object-fit: cover;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .overlay.liked {
+    background-color: red;
+  }
+</style>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex pt-3 pb-2 mb-3 border-bottom">
+    <h1>Generate SlideShow</h1>
+  </div>
+  <div class="mb-3">
+    <form id="slideshowForm">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="videoName" class="form-label">Video Name:</label>
+          <input type="text" class="form-control" id="videoName" name="videoName" required>
+        </div>
+        <div class="col-md-4">
+          <label for="duration" class="form-label">Duration (seconds):</label>
+          <input type="number" class="form-control" id="duration" name="duration" required>
+        </div>
+        <div class="col-md-4">
+          <label for="fps" class="form-label">FPS:</label>
+          <input type="number" class="form-control" id="fps" name="fps" required>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary mb-3" onclick="generateSlideshow()">Generate Slideshow</button>
+    </form>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6">
+    <% creations.forEach(function(creation) { %>
+      <div class="col mb-4">
+        <div class="card">
+          <a href="/creations/<%= creation.id %>" class="card-link">
+            <div class="card-img-wrapper">
+              <img src="<%= creation.thumbnailUrl %>" class="card-img-top" alt="Image">
+              <div class="overlay <%= creation.isLiked ? 'liked' : '' %>" data-creation-id="<%= creation.id %>">
+                <input type="checkbox" class="form-check-input creation-checkbox" data-image-url="<%= creation.imageUrl %>">
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</main>
+
+<script>
+  function generateSlideshow() {
+    const videoName = document.getElementById('videoName').value;
+    const duration = document.getElementById('duration').value;
+    const fps = document.getElementById('fps').value;
+    const selectedImages = Array.from(document.querySelectorAll('.creation-checkbox:checked'))
+                                .map(checkbox => checkbox.getAttribute('data-image-url'));
+
+    if (selectedImages.length === 0) {
+      alert('Please select at least one image.');
+      return;
+    }
+
+    const data = {
+      videoName,
+      duration,
+      fps,
+      images: selectedImages
+    };
+
+    fetch('/generate_slideshow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log(result);
+      alert(JSON.stringify(result, null, 2));
+    })
+    .catch(error => {
+      console.error('Error generating slideshow:', error);
+      alert('There was an error generating the slideshow.');
+    });
+  }
+</script>

@@ -1,28 +1,42 @@
 
 function generateImage() {
 
+  const imageAlert = document.getElementById('imageAlert');
 
+  imageAlert.style.display = 'block';
 
-
-  const age = document.querySelector('input[name="age"]:checked').value;
-  const bodyShape = document.querySelector('input[name="bodyShape"]:checked').value;
-  const breastsize = document.querySelector('input[name="breastSize"]:checked').value;
-  const expression = document.querySelector('input[name="expression"]:checked').value;
-  const hairLength = document.querySelector('input[name="hairLength"]:checked').value;
-  const hairType = document.querySelector('input[name="hairType"]:checked').value;
-  const hairColor = document.getElementById('hairColor').value;
-  const eyeColor = document.getElementById('eyeColor').value;
-  const waifuName = document.getElementById('randomName').value;
+  const age = document.querySelector('input[name="age"]:checked')?.value ?? '';
+  const bodyShape = document.querySelector('input[name="bodyShape"]:checked')?.value ?? '';
+  const breastSize = document.querySelector('input[name="breastSize"]:checked')?.value ?? '';
+  const expression = document.querySelector('input[name="expression"]:checked')?.value ?? '';
+  const hairLength = document.querySelector('input[name="hairLength"]:checked')?.value ?? '';
+  const hairType = document.querySelector('input[name="hairType"]:checked')?.value ?? '';
+  const hairColor = document.getElementById('hairColor')?.value ?? '';
+  const eyeColor = document.getElementById('eyeColor')?.value ?? '';
+  const waifuName = document.getElementById('randomName')?.value ?? '';
+  const fullClothes = document.querySelector('input[name="clothes"]:checked')?.value ?? '';
+  const upperBodyClothes = document.querySelector('input[name="upperBody"]:checked')?.value ?? '';
+  const lowerBodyClothes = document.querySelector('input[name="lowerBody"]:checked')?.value ?? '';
+  const onePieceClothesColor = document.getElementById('onePieceClothesColor')?.value ?? '';
+  const upperClothesColor = document.getElementById('upperClothesColor')?.value ?? '';
+  const lowerClothesColor = document.getElementById('lowerClothesColor')?.value ?? '';
+  
 
   const requestBody = {
     age: age,
     bodyShape: bodyShape,
-    breastSize: breastsize,
+    breastSize: breastSize,
     expression: expression,
     hairLength: hairLength,
     hairType: hairType,
     hairColor: hairColor,
     eyeColor: eyeColor,
+    fullClothes: fullClothes,
+    upperBodyClothes: upperBodyClothes,
+    lowerBodyClothes: lowerBodyClothes,
+    onePieceClothesColor: onePieceClothesColor,
+    upperClothesColor: upperClothesColor,
+    lowerClothesColor: lowerClothesColor,
     waifuName: waifuName
   };
 
@@ -36,6 +50,7 @@ function generateImage() {
     .then(response => {
       if (response.status === 403) {
         return response.json().then(data => {
+          imageAlert.style.display = 'none';
           // Show notification with the response message
           showAlert(data.message, 'danger'); // Show a Bootstrap alert with the message
         });
@@ -56,6 +71,8 @@ function generateImage() {
 
         // Append the image to the container
         imageContainer.appendChild(img);
+
+        imageAlert.style.display = 'none';
       } else {
         console.log('Failed to fetch image tag content.');
       }

@@ -5,6 +5,10 @@
   <h2>welcome <%= user.displayName %>
   </h2>
   <p> You have <%= user.remainingCreations %> creations left!</p>
+  <!-- <h2>buy more AlkimiaTokens</h2>
+  <form action="/create-checkout-session" method="POST">
+    <button type="submit" id="checkout-button">Checkout</button>
+  </form> -->
 
   <% if (user.userVerified) { %>
     <h3> Your last Creations:</h3>

@@ -3,162 +3,554 @@
     <h1>Waifu configurator</h1>
   </div>
   <h3 class="mt-3">Name:</h3>
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="randomName" value="<%= waifuName %>" >
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" onclick="regenerateName()">Regenerate</button>
-        </div>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="randomName" value="<%= waifuName %>">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" onclick="regenerateName()">Regenerate</button>
     </div>
-  <h3 class="mt-3">Age:</h3>
-  <div class="btn-group-toggle" role="group" data-toggle="buttons">
-
-    <input type="radio" name="age" class="btn-check" id="age1" value="loli" autocomplete="off" checked>
-    <label class="btn btn-outline-dark" for="age1">Loli</label>
-
-    <input type="radio" name="age" class="btn-check" id="age2" value="girl" autocomplete="off">
-    <label class="btn btn-outline-dark" for="age2">Girl</label>
-
-    <input type="radio" name="age" class="btn-check" id="age3" value="teen girl" autocomplete="off">
-    <label class="btn btn-outline-dark" for="age3">Teen</label>
-
-    <input type="radio" name="age" class="btn-check" id="age4" value="woman" autocomplete="off">
-    <label class="btn btn-outline-dark" for="age4">Woman</label>
-
-    <input type="radio" name="age" class="btn-check" id="age5" value="Old grandma" autocomplete="off">
-    <label class="btn btn-outline-dark" for="age5">Old</label>
   </div>
-  <h3 class="mt-3">Body Shape:</h3>
-  <div class="btn-group-toggle" role="group" data-toggle="buttons">
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape1" value="scrawny body" autocomplete="off"
-      checked>
-    <label class="btn btn-outline-dark" for="bodyShape1">Scrawny</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape2" value="petite body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape2">Petite</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape3" value="slim body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape3">Slim</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape4" value="curvy body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape4">Chubby</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape5" value="plump body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape5">Plump</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape6" value="fat body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape6">Fat</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape7" value="obese body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape7">Obese</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape8" value="muscular body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape8">Muscular</label>
-    <input type="radio" name="bodyShape" class="btn-check" id="bodyShape9" value="sexy body" autocomplete="off">
-    <label class="btn btn-outline-dark" for="bodyShape9">Sexy</label>
-  </div>
+  <div class="accordion" id="waifuAccordion">
+    <!-- Physical Traits Group -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingPhysicalTraits">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+          data-bs-target="#collapsePhysicalTraits" aria-expanded="true" aria-controls="collapsePhysicalTraits">
+          Physical Traits
+        </button>
+      </h2>
+      <div id="collapsePhysicalTraits" class="accordion-collapse collapse show" aria-labelledby="headingPhysicalTraits">
+        <div class="accordion-body">
+          <div class="container mt-4">
+            <div class="row">
+              <!-- Age Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Age</h5>
+                    <div class="btn-group-toggle" role="group" data-toggle="buttons">
+                      <input type="radio" name="age" class="btn-check" id="age1" value="loli" autocomplete="off"
+                        checked>
+                      <label class="btn btn-outline-dark mb-2" for="age1">Loli</label>
 
-  <h3 class="mt-3">Breast size:</h3>
-  <div class="btn-group-toggle" role="group" data-toggle="buttons">
-    <input type="radio" name="breastSize" class="btn-check" id="breastSize1" value="flat chest" autocomplete="off"
-      checked>
-    <label class="btn btn-outline-dark" for="breastSize1">Flat chest</label>
-    <input type="radio" name="breastSize" class="btn-check" id="breastSize2" value="small breasts" autocomplete="off">
-    <label class="btn btn-outline-dark" for="breastSize2">Small</label>
-    <input type="radio" name="breastSize" class="btn-check" id="breastSize3" value="medium breasts" autocomplete="off">
-    <label class="btn btn-outline-dark" for="breastSize3">Medium</label>
-    <input type="radio" name="breastSize" class="btn-check" id="breastSize4" value="large breasts" autocomplete="off">
-    <label class="btn btn-outline-dark" for="breastSize4">Big</label>
-    <input type="radio" name="breastSize" class="btn-check" id="breastSize5" value="huge breasts" autocomplete="off">
-    <label class="btn btn-outline-dark" for="breastSize5">Huge</label>
-    <input type="radio" name="breastSize" class="btn-check" id="breastSize6" value="gigantic breasts"
-      autocomplete="off">
-    <label class="btn btn-outline-dark" for="breastSize6">Gigantic</label>
-  </div>
-  <h3 class="mt-3">Expression:</h3>
-  <div class="btn-group-toggle" role="group" data-toggle="buttons">
-    <input type="radio" name="expression" class="btn-check" id="expression1" value="smiling" autocomplete="off" checked>
-    <label class="btn btn-outline-dark" for="expression1">Smiling</label>
-    <input type="radio" name="expression" class="btn-check" id="expression2" value="expressionless" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression2">Expressionless</label>
-    <input type="radio" name="expression" class="btn-check" id="expression3" value="sad" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression3">Sad</label>
-    <input type="radio" name="expression" class="btn-check" id="expression4" value="crying" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression4">Crying</label>
-    <input type="radio" name="expression" class="btn-check" id="expression5" value="angry" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression5">Angry</label>
-    <input type="radio" name="expression" class="btn-check" id="expression6" value="embarrassed" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression6">Embarrassed</label>
-    <input type="radio" name="expression" class="btn-check" id="expression7" value="maniac" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression7">Maniac</label>
-    <input type="radio" name="expression" class="btn-check" id="expression8" value="shocked" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression8">Shocked</label>
-    <input type="radio" name="expression" class="btn-check" id="expression9" value="excited" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression9">Excited</label>
-    <input type="radio" name="expression" class="btn-check" id="expression10" value="confused" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression10">Confused</label>
-    <input type="radio" name="expression" class="btn-check" id="expression11" value="nervous" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression11">Nervous</label>
-    <input type="radio" name="expression" class="btn-check" id="expression12" value="aroused" autocomplete="off">
-    <label class="btn btn-outline-dark" for="expression12">Aroused</label>
-  </div>
-  <h3 class="mt-3">Hair Length:</h3>
-  <div class="btn-group-toggle" role="group" data-toggle="buttons">
-    <input type="radio" name="hairLength" class="btn-check" id="hairLength1" value="Bald" autocomplete="off" checked>
-    <label class="btn btn-outline-dark" for="hairLength1">Bald</label>
-    <input type="radio" name="hairLength" class="btn-check" id="hairLength2" value="(buzzcut hair)" autocomplete="off"
-      checked>
-    <label class="btn btn-outline-dark" for="hairLength2">Buzzcut</label>
-    <input type="radio" name="hairLength" class="btn-check" id="hairLength3" value="short hair" autocomplete="off"
-      checked>
-    <label class="btn btn-outline-dark" for="hairLength3">Short</label>
-    <input type="radio" name="hairLength" class="btn-check" id="hairLength4" value="long hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairLength4">Long</label>
-    <input type="radio" name="hairLength" class="btn-check" id="hairLength5" value="extra long hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairLength5">Extra long</label>
-  </div>
+                      <input type="radio" name="age" class="btn-check" id="age2" value="girl" autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="age2">Girl</label>
 
-  <h3 class="mt-3">Hair Type:</h3>
+                      <input type="radio" name="age" class="btn-check" id="age3" value="teen girl" autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="age3">Teen</label>
 
-  <div class="btn-group-toggle" role="group" data-toggle="buttons">
-    <input type="radio" name="hairType" class="btn-check" id="hairType0" value="" autocomplete="off" checked>
-    <label class="btn btn-outline-dark" for="hairType1">None</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType1" value="bowl cut hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType1">Bowl cut</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType2" value="messy hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType2">Messy</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType3" value="curly hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType3">Curly</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType4" value="spiky hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType4">Spiky</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType5" value="pixiecut hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType5">Pixie cut</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType6" value="bob hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType6">Bob hair</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType7" value="short hair with long locks"
-      autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType7">Short hair with long locks</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType8" value="hair bun" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType8">Hair bun</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType9" value="braided hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType9">Braided</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType10" value="braided bun hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType10">Braided bun</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType11" value="double bun hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType11">Double bun</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType12" value="hair drill" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType12">Hair drill</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType13" value="pigtail hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType13">Pigtail</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType14" value="twintails hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType14">Twintails</label>
-    <input type="radio" name="hairType" class="btn-check" id="hairType15" value="ponytail hair" autocomplete="off">
-    <label class="btn btn-outline-dark" for="hairType15">Ponytail</label>
+                      <input type="radio" name="age" class="btn-check" id="age4" value="woman" autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="age4">Woman</label>
+
+                      <input type="radio" name="age" class="btn-check" id="age5" value="Old grandma" autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="age5">Old</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Body Shape Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Body Shape</h5>
+                    <div class="btn-group-toggle" role="group" data-toggle="buttons">
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape1" value="scrawny body"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape1">Scrawny</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape2" value="petite body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape2">Petite</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape3" value="slim body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape3">Slim</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape4" value="curvy body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape4">Chubby</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape5" value="plump body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape5">Plump</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape6" value="fat body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape6">Fat</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape7" value="obese body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape7">Obese</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape8" value="muscular body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape8">Muscular</label>
+
+                      <input type="radio" name="bodyShape" class="btn-check" id="bodyShape9" value="sexy body"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="bodyShape9">Sexy</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Breast Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Breast size</h5>
+                    <div class="btn-group-toggle" role="group" data-toggle="buttons">
+                      <input type="radio" name="breastSize" class="btn-check" id="breastSize1" value="flat chest"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-dark mb-2" for="breastSize1">Flat chest</label>
+                      <input type="radio" name="breastSize" class="btn-check" id="breastSize2" value="small breasts"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="breastSize2">Small</label>
+                      <input type="radio" name="breastSize" class="btn-check" id="breastSize3" value="medium breasts"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="breastSize3">Medium</label>
+                      <input type="radio" name="breastSize" class="btn-check" id="breastSize4" value="large breasts"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="breastSize4">Big</label>
+                      <input type="radio" name="breastSize" class="btn-check" id="breastSize5" value="huge breasts"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="breastSize5">Huge</label>
+                      <input type="radio" name="breastSize" class="btn-check" id="breastSize6" value="gigantic breasts"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="breastSize6">Gigantic</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Expression Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Expression:</h5>
+                    <div class="btn-group-toggle" role="group" data-toggle="buttons">
+                      <input type="radio" name="expression" class="btn-check" id="expression1" value="smiling"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-dark mb-2" for="expression1">Smiling</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression2" value="expressionless"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression2">Expressionless</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression3" value="sad"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression3">Sad</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression4" value="crying"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression4">Crying</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression5" value="angry"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression5">Angry</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression6" value="embarrassed"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression6">Embarrassed</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression7" value="maniac"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression7">Maniac</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression8" value="shocked"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression8">Shocked</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression9" value="excited"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression9">Excited</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression10" value="confused"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression10">Confused</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression11" value="nervous"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression11">Nervous</label>
+                      <input type="radio" name="expression" class="btn-check" id="expression12" value="aroused"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="expression12">Aroused</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hair length Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Hair Length</h5>
+                    <div class="btn-group-toggle" role="group" data-toggle="buttons">
+                      <input type="radio" name="hairLength" class="btn-check" id="hairLength1" value="Bald"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-dark mb-2" for="hairLength1">Bald</label>
+                      <input type="radio" name="hairLength" class="btn-check" id="hairLength2" value="(buzzcut hair)"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-dark mb-2" for="hairLength2">Buzzcut</label>
+                      <input type="radio" name="hairLength" class="btn-check" id="hairLength3" value="short hair"
+                        autocomplete="off" checked>
+                      <label class="btn btn-outline-dark mb-2" for="hairLength3">Short</label>
+                      <input type="radio" name="hairLength" class="btn-check" id="hairLength4" value="long hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairLength4">Long</label>
+                      <input type="radio" name="hairLength" class="btn-check" id="hairLength5" value="extra long hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairLength5">Extra long</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hair Type Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Hair Type</h5>
+                    <div class="btn-group-toggle" role="group" data-toggle="buttons">
+                      <input type="radio" name="hairType" class="btn-check" id="hairType0" value="" autocomplete="off"
+                        checked>
+                      <label class="btn btn-outline-dark mb-2" for="hairType1">None</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType1" value="bowl cut hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType1">Bowl cut</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType2" value="messy hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType2">Messy</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType3" value="curly hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType3">Curly</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType4" value="spiky hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType4">Spiky</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType5" value="pixiecut hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType5">Pixie cut</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType6" value="bob hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType6">Bob hair</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType7"
+                        value="short hair with long locks" autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType7">Short hair with long locks</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType8" value="hair bun"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType8">Hair bun</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType9" value="braided hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType9">Braided</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType10" value="braided bun hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType10">Braided bun</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType11" value="double bun hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType11">Double bun</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType12" value="hair drill"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType12">Hair drill</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType13" value="pigtail hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType13">Pigtail</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType14" value="twintails hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType14">Twintails</label>
+                      <input type="radio" name="hairType" class="btn-check" id="hairType15" value="ponytail hair"
+                        autocomplete="off">
+                      <label class="btn btn-outline-dark mb-2" for="hairType15">Ponytail</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Hair Color Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Hair Color</h5>
+                    <div id="hairColorPicker"></div>
+                    <input type="hidden" id="hairColor" value="#ffd700">
+                  </div>
+                </div>
+              </div>
+              <!-- Eye Color Section -->
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Eye Color</h5>
+                    <div id="eyeColorPicker"></div>
+                    <input type="hidden" id="eyeColor" value="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Clothes Group -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingClothesTraits">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClothesTraits"
+          aria-expanded="true" aria-controls="collapseClothesTraits">
+          Clothes
+        </button>
+      </h2>
+      <div id="collapseClothesTraits" class="accordion-collapse collapse show" aria-labelledby="headingClothesTraits">
+        <div class="accordion-body">
+
+          <!-- Special Clothes Section -->
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="btn-group-toggle me-2" role="group" data-toggle="buttons">
+                    <input type="radio" name="clothesGroup" class="btn-check" id="groupSpecial" value="special">
+                    <label class="btn btn-outline-primary btn-sm" for="groupSpecial">Use</label>
+                  </div>
+                  <h5 class="card-title mb-0">Special Clothes</h5>
+                </div>
+                <div class="btn-group-toggle mt-2" role="group" data-toggle="buttons">
+                  <input type="radio" name="clothes" class="btn-check" id="special1" value="(school uniform)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special1">School Uniform</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special2" value="(gothic dress)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special2">Gothic Dress</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special3" value="(maid outfit)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special3">Maid Outfit</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special4" value="(a witch costume)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special4">Witch costume</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special5" value="(school swimsuit)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special5">Sukumizu</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special7" value="(magical girl outfit)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special7">Magical Girl Outfit</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special8" value="(idol outfit)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special8">Idol Outfit</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special9" value="(samurai clothes)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special9">Samurai</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special10" value="(traditional kimono)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special10">Kimono</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special11" value="(military outfit)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special11">Military outfit</label>
+                  <input type="radio" name="clothes" class="btn-check" id="special12" value="(nurse outfit)"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="special12">Nurse outfit</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- one-piece Clothes Section -->
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="btn-group-toggle me-2" role="group" data-toggle="buttons">
+                    <input type="radio" name="clothesGroup" class="btn-check" id="groupOnePiece" value="onePiece">
+                    <label class="btn btn-outline-primary btn-sm" for="groupOnePiece">Use</label>
+                  </div>
+                  <h5 class="card-title mb-0">One Piece Clothes</h5>
+                </div>
+                <div class="btn-group-toggle mt-2" role="group" data-toggle="buttons">
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece1"
+                    value="plain underwear" autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece1">Plain underwear</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece2"
+                    value="sweet underwear" autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece2">Sweet underwear</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece3"
+                    value="sexy underwear" autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece3">Sexy underwear</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece4" value="casual clothes"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece4">Casual clothes</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece5" value="gym clothes"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece5">Gym clothes</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece6" value="a bikini swimsuit"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece6">Bikini</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece7" value="short dress"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece7">Short dress</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece8" value="summer dress"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece8">Summer dress</label>
+
+                  <input type="radio" name="clothes" class="btn-check" id="onePiece9" value="Night elegant dress"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="onePiece9">Night dress</label>
+                </div>
+                <!-- one-Piece Clothes Color Section -->
+                <h6 class="card-title">Color</h6>
+                <div class="d-flex flex-wrap" id="clothingColors">
+                  <div id="onePieceClothesColorPicker"></div>
+                  <input type="hidden" id="onePieceClothesColor" value="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Two-piece Clothes Section -->
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                  <div class="btn-group-toggle me-2" role="group" data-toggle="buttons">
+                    <input type="radio" name="clothesGroup" class="btn-check" id="groupTwoPiece" value="twoPiece">
+                    <label class="btn btn-outline-primary btn-sm" for="groupTwoPiece">Select</label>
+                  </div>
+                  <h5 class="card-title mb-0">Two Piece Clothes</h5>
+                </div>
+                <div class="btn-group-toggle mt-2" role="group" data-toggle="buttons">
+                  <h6>Upper Body</h6>
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper1" value="bra"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper1">Bra</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper2" value="plain t-shirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper2">Plain t-shirt</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper3" value="oversized shirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper3">Oversize shirt</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper4" value="hoodie"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper4">Hoodie</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper5" value="oversized hoodie"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper5">Oversize hoodie</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper6" value="tank top"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper6">Tank Top</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper7" value="sweater"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper7">Sweater</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper8" value="blouse"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper8">Blouse</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper9" value="crop top"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper9">Crop Top</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper10" value="button-up shirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper10">Button-up Shirt</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper11" value="vest"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper11">Vest</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper12" value="cardigan"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper12">Cardigan</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper13" value="polo shirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper13">Polo Shirt</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper14" value="long-sleeve shirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper14">Long-sleeve Shirt</label>
+
+                  <input type="radio" name="upperBody" class="btn-check" id="twoPieceUpper15" value="denim jacket"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceUpper15">Denim Jacket</label>
+
+                </div>
+                <!-- upper Clothes Color Section -->
+                <h6 class="card-title">Color</h6>
+                <div class="d-flex flex-wrap" id="clothingColors">
+                  <div id="upperClothesColorPicker"></div>
+                  <input type="hidden" id="upperClothesColor" value="">
+                </div>
+                <div class="btn-group-toggle mt-2" role="group" data-toggle="buttons">
+                  <h6>Lower Body</h6>
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom1" value="jeans"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom1">Jeans</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom2" value="shorts"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom2">Shorts</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom3" value="skirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom3">Skirt</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom4" value="leggings"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom4">Leggings</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom5" value="sweatpants"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom5">Sweatpants</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom6" value="joggers"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom6">Joggers</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom7" value="capris"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom7">Capris</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom8" value="cargo pants"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom8">Cargo Pants</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom9" value="dress pants"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom9">Dress Pants</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom10" value="khakis"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom10">Khakis</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom11" value="trousers"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom11">Trousers</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom12" value="maxi skirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom12">Maxi Skirt</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom13" value="miniskirt"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom13">Miniskirt</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom14" value="culottes"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom14">Culottes</label>
+
+                  <input type="radio" name="lowerBody" class="btn-check" id="twoPieceBottom15" value="overall shorts"
+                    autocomplete="off" disabled>
+                  <label class="btn btn-outline-dark mb-2" for="twoPieceBottom15">Overall Shorts</label>
+                </div>
+                <!-- lower Clothes Color Section -->
+                <h6 class="card-title">Color</h6>
+                <div class="d-flex flex-wrap" id="clothingColors">
+                  <div id="lowerClothesColorPicker"></div>
+                  <input type="hidden" id="lowerClothesColor" value="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <h3 class="mt-3">Hair Color:</h3>
-  <div id="hairColorPicker"></div>
-  <input type="hidden" id="hairColor" value="#ffd700">
-
-  <h3 class="mt-3">Eye Color:</h3>
-  <div id="eyeColorPicker"></div>
-  <input type="hidden" id="eyeColor" value="">
-
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-
       // Disable hair type options based on hair length initially
       updateHairTypeOptions();
 
@@ -191,7 +583,7 @@
             radio.disabled = true;
           });
           //Disable hairColorPicker
-          disableDiv('hairColorPicker', 'hairColor');
+          disableDiv('hairColorPicker', 'hairColor',true);
 
 
         } else if (hairLength === "long hair") {
@@ -200,11 +592,11 @@
         }
       }
 
-      function disableDiv(containerId, hiddenInputId) {
+      function disableDiv(containerId, hiddenInputId, value) {
         var container = document.getElementById(containerId);
         var hiddenInput = document.getElementById(hiddenInputId);
 
-        container.disabled = true;
+        container.disabled = value;
 
         //deselect previous
         var selectedColorBox = container.querySelector('.selected');
@@ -228,6 +620,25 @@
           var colorBox = document.createElement('div');
           colorBox.classList.add('color-box');
           colorBox.style.backgroundColor = color;
+          if (color === 'none') {
+            colorBox.style.backgroundColor = 'transparent';
+            colorBox.classList.add('none-color');
+            colorBox.id= hiddenInputId + '0'
+            // colorBox.style.display = 'flex';
+            // colorBox.style.alignItems = 'center';
+            // colorBox.style.justifyContent = 'center';
+
+            // // Create the span element
+            // var spanElement = document.createElement('span');
+            // spanElement.style.color = '#ccc';
+            // spanElement.textContent = 'X';
+
+            // // Append the span to the div
+            // colorBox.appendChild(spanElement);
+          }
+          if (color === 'multicolor') {
+            colorBox.style.backgroundImage = 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)';
+          }
 
           colorBox.addEventListener('click', function (event) {
 
@@ -284,9 +695,112 @@
         // Add more mappings as needed
       };
 
+
+      var clothesColorMap = {
+        'none': 'none',
+        '#c40a00': 'red',
+        'blue': 'blue',
+        'green': 'green',
+        'yellow': 'yellow',
+        'pink': 'pink',
+        'purple': 'purple',
+        'orange': 'orange',
+        'white': 'white',
+        'black': 'black',
+        'brown': 'brown',
+        'gray': 'gray',
+        'cyan': 'cyan',
+        'magenta': 'magenta',
+        'lime': 'lime',
+        'teal': 'teal',
+        'olive': 'olive',
+        'maroon': 'maroon',
+        'navy': 'navy',
+        'gold': 'gold',
+        'multicolor': 'colorful'
+      };
+
       // Create color pickers
       createColorPicker('hairColorPicker', 'hairColor', hairColorMap);
       createColorPicker('eyeColorPicker', 'eyeColor', eyeColorMap);
+      createColorPicker('onePieceClothesColorPicker', 'onePieceClothesColor', clothesColorMap);
+      createColorPicker('upperClothesColorPicker', 'upperClothesColor', clothesColorMap);
+      createColorPicker('lowerClothesColorPicker', 'lowerClothesColor', clothesColorMap);
+
+
+      document.querySelectorAll('input[name="clothesGroup"]').forEach(input => {
+        input.addEventListener('change', function () {
+          // Disable all clothes radio buttons
+          document.querySelectorAll('input[name="clothes"]').forEach(radio => {
+            radio.disabled = true;
+            radio.checked = false;
+            radio.parentElement.classList.remove('active');  // Remove active class from labels
+          });
+          disableDiv('onePieceClothesColorPicker', 'onePieceClothesColor',true);
+          disableDiv('upperClothesColorPicker', 'upperClothesColor',true);
+          disableDiv('lowerClothesColorPicker', 'lowerClothesColor',true);
+
+          // Disable and uncheck upper and lower body radio buttons
+          document.querySelectorAll('input[name="upperBody"], input[name="lowerBody"]').forEach(radio => {
+            radio.disabled = true;
+            radio.checked = false;
+            radio.parentElement.classList.remove('active');  // Remove active class from labels
+          });
+
+          // Enable the selected group's clothes radio buttons
+          const selectedGroup = this.value;
+          document.querySelectorAll(`input[name="clothes"][id*=${selectedGroup}]`).forEach(radio => {
+            radio.disabled = false;
+          });
+
+          if (selectedGroup === 'onePiece') {
+            disableDiv('onePieceClothesColorPicker', 'onePieceClothesColor',false);
+          }
+
+          // Enable the upper and lower body radio buttons if "twoPiece" is selected
+          if (selectedGroup === 'twoPiece') {
+            document.querySelectorAll('input[name="upperBody"], input[name="lowerBody"]').forEach(radio => {
+              radio.disabled = false;
+            });
+            disableDiv('upperClothesColorPicker', 'upperClothesColor',false);
+            disableDiv('lowerClothesColorPicker', 'lowerClothesColor',false);
+          }
+
+          // Ensure the clothesGroup radio buttons are mutually exclusive
+          document.querySelectorAll('input[name="clothesGroup"]').forEach(groupRadio => {
+            if (groupRadio !== this) {
+              groupRadio.checked = false;
+              groupRadio.parentElement.classList.remove('active');  // Remove active class from labels
+            }
+          });
+        });
+      });
+
+      // Add event listeners for upperBody and lowerBody radio buttons
+      document.querySelectorAll('input[name="upperBody"], input[name="lowerBody"]').forEach(input => {
+        input.addEventListener('change', function () {
+          // Remove active class from all clothes options
+          document.querySelectorAll('input[name="clothes"]').forEach(radio => {
+            radio.checked = false;
+            radio.parentElement.classList.remove('active');
+          });
+        });
+      });
+
+      // Add event listeners for clothes radio buttons
+      document.querySelectorAll('input[name="clothes"]').forEach(input => {
+        input.addEventListener('change', function () {
+          // Remove active class from all upperBody and lowerBody options
+          document.querySelectorAll('input[name="upperBody"], input[name="lowerBody"]').forEach(radio => {
+            radio.checked = false;
+            radio.parentElement.classList.remove('active');
+          });
+        });
+      });
+
+
+
+
 
 
 
@@ -294,14 +808,14 @@
     });
 
 
-    
+
     function regenerateName() {
-            const firstNames = ['Ikerada', 'Manamaya', 'Managuchi', 'Muya', 'Dokaki', 'Sunen', 'Fuyashi', 'Uyebaru', 'Ogano', 'Kimari', 'Matsumaya', 'Uyekita', 'Kurizora', 'Isekawa', 'Wakagiri', 'Kinobi', 'Nabira', 'Tonari', 'Wakikaze', 'Harizaki', 'Hashibira', 'Suzuzora', 'Nonaga', 'Shinoraki', 'Tatsuchi', 'Miyasuchi', 'Susano', 'Hirogusa', 'Yakutsu', 'Zaruta', 'Hisamari', 'Segita', 'Hiratsami', 'Hisagai', 'Hawa', 'Hamahaya', 'Azumoto', 'Sekigimoto', 'Agayama', 'Yamayuki', 'Kaguse', 'Fubuto', 'Rikizawa', 'Amayashi', 'Amari', 'Tahatsumi', 'Kawawara', 'Adasuchi', 'Matsuka', 'Harato', 'Wakukita', 'Tomikino', 'Takegome', 'Uzuki', 'Ikenari', 'Haramaki', 'Fukuzato', 'Fujimiya', 'Amara', 'Tanimoto', 'Kodakono', 'Hashinashi', 'Morinishi', 'Yanaya', 'Hoguchi', 'Kobagawa', 'Manami', 'Isogami', 'Homuro', 'Kagushiro', 'Masawa', 'Ichisano', 'Yamamano', 'Kojima', 'Hashitsu', 'Sune', 'Imakuwa', 'Harakiri', 'Akagaki', 'Nariyoshi', 'Yashima', 'Tatsuno', 'Yoshikawa', 'Tsuruoka', 'Tanabe', 'Dokuro', 'Arashiro', 'Kozato', 'Oishi', 'Tsuchiya', 'Eguchi', 'Minamoto', 'Ametsuchi', 'Yukiyama', 'Miyazawa', 'Tano', 'Watanuki', 'Takagi', 'Ishibashi', 'Imamura', 'Jo', 'Yamabe', 'Sawaya', 'Tsukiyama', 'Kitagawa'];
-            const surNames = ['Kunitan', 'Sayoshi', 'Naritane', 'Tadake', 'Benjiyasu', 'Ineshida', 'Ketaro', 'Kamansei', 'Yakabei', 'Hinmochi', 'Milimiko', 'Hoshine', 'Midome', 'Kimime', 'Ryosa', 'Kirazuka', 'Masutsu', 'Haninuye', 'Kanemami', 'Tatsumo', 'Kukitako', 'Tokizuka', 'Tanigi', 'Akotsune', 'Minena', 'Osarako', 'Sayonari', 'Sayokuri', 'Orimachi', 'Azunatsu', 'Achiko', 'Makizuka', 'Kazatako', 'Himekiko', 'Kuruze', 'Temika', 'Natsukuri', 'Tame', 'Wakase', 'Kurari', 'Hikachiko', 'Hidiri', 'Hainari', 'Arisuki', 'Yara', 'Hoshirabi', 'Umetako', 'Tanakayo', 'Toshirise', 'Milikari', 'Sawaki', 'Himeshiko', 'Sakikura', 'Urasuki', 'Kyotako', 'Imani', 'Saizumi', 'Atsudoka', 'Natsurari', 'Sayochiru', 'Kohayoshi', 'Emirime', 'Takanase', 'Kozatsuki', 'Tsudoka', 'Wana', 'Tatsushi', 'Kahokichi', 'Aize', 'Natsumika', 'Komami', 'Sanomi', 'Kirarime', 'Edoka', 'Tadachiru', 'Anekayo', 'Gime', 'Maemachi', 'Kimiruri', 'Asumi', 'Misa', 'Reira', 'Kouko', 'Toshie', 'Himeko', 'Mayako', 'Isaki', 'Ome', 'Yu', 'Aishun', 'Rinako', 'Sute', 'Arisa', 'Honomi', 'Tatsumi', 'Fuji', 'Tamaki', 'Ai', 'Taki', 'Amarante', 'Eriko', 'Kinuyo', 'Fuyu', 'Emu', 'Aneka'];
-            const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-            const surName = surNames[Math.floor(Math.random() * surNames.length)];
-            document.getElementById('randomName').value = `${firstName} ${surName}`;
-        }
+      const firstNames = ['Ikerada', 'Manamaya', 'Managuchi', 'Muya', 'Dokaki', 'Sunen', 'Fuyashi', 'Uyebaru', 'Ogano', 'Kimari', 'Matsumaya', 'Uyekita', 'Kurizora', 'Isekawa', 'Wakagiri', 'Kinobi', 'Nabira', 'Tonari', 'Wakikaze', 'Harizaki', 'Hashibira', 'Suzuzora', 'Nonaga', 'Shinoraki', 'Tatsuchi', 'Miyasuchi', 'Susano', 'Hirogusa', 'Yakutsu', 'Zaruta', 'Hisamari', 'Segita', 'Hiratsami', 'Hisagai', 'Hawa', 'Hamahaya', 'Azumoto', 'Sekigimoto', 'Agayama', 'Yamayuki', 'Kaguse', 'Fubuto', 'Rikizawa', 'Amayashi', 'Amari', 'Tahatsumi', 'Kawawara', 'Adasuchi', 'Matsuka', 'Harato', 'Wakukita', 'Tomikino', 'Takegome', 'Uzuki', 'Ikenari', 'Haramaki', 'Fukuzato', 'Fujimiya', 'Amara', 'Tanimoto', 'Kodakono', 'Hashinashi', 'Morinishi', 'Yanaya', 'Hoguchi', 'Kobagawa', 'Manami', 'Isogami', 'Homuro', 'Kagushiro', 'Masawa', 'Ichisano', 'Yamamano', 'Kojima', 'Hashitsu', 'Sune', 'Imakuwa', 'Harakiri', 'Akagaki', 'Nariyoshi', 'Yashima', 'Tatsuno', 'Yoshikawa', 'Tsuruoka', 'Tanabe', 'Dokuro', 'Arashiro', 'Kozato', 'Oishi', 'Tsuchiya', 'Eguchi', 'Minamoto', 'Ametsuchi', 'Yukiyama', 'Miyazawa', 'Tano', 'Watanuki', 'Takagi', 'Ishibashi', 'Imamura', 'Jo', 'Yamabe', 'Sawaya', 'Tsukiyama', 'Kitagawa'];
+      const surNames = ['Kunitan', 'Sayoshi', 'Naritane', 'Tadake', 'Benjiyasu', 'Ineshida', 'Ketaro', 'Kamansei', 'Yakabei', 'Hinmochi', 'Milimiko', 'Hoshine', 'Midome', 'Kimime', 'Ryosa', 'Kirazuka', 'Masutsu', 'Haninuye', 'Kanemami', 'Tatsumo', 'Kukitako', 'Tokizuka', 'Tanigi', 'Akotsune', 'Minena', 'Osarako', 'Sayonari', 'Sayokuri', 'Orimachi', 'Azunatsu', 'Achiko', 'Makizuka', 'Kazatako', 'Himekiko', 'Kuruze', 'Temika', 'Natsukuri', 'Tame', 'Wakase', 'Kurari', 'Hikachiko', 'Hidiri', 'Hainari', 'Arisuki', 'Yara', 'Hoshirabi', 'Umetako', 'Tanakayo', 'Toshirise', 'Milikari', 'Sawaki', 'Himeshiko', 'Sakikura', 'Urasuki', 'Kyotako', 'Imani', 'Saizumi', 'Atsudoka', 'Natsurari', 'Sayochiru', 'Kohayoshi', 'Emirime', 'Takanase', 'Kozatsuki', 'Tsudoka', 'Wana', 'Tatsushi', 'Kahokichi', 'Aize', 'Natsumika', 'Komami', 'Sanomi', 'Kirarime', 'Edoka', 'Tadachiru', 'Anekayo', 'Gime', 'Maemachi', 'Kimiruri', 'Asumi', 'Misa', 'Reira', 'Kouko', 'Toshie', 'Himeko', 'Mayako', 'Isaki', 'Ome', 'Yu', 'Aishun', 'Rinako', 'Sute', 'Arisa', 'Honomi', 'Tatsumi', 'Fuji', 'Tamaki', 'Ai', 'Taki', 'Amarante', 'Eriko', 'Kinuyo', 'Fuyu', 'Emu', 'Aneka'];
+      const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+      const surName = surNames[Math.floor(Math.random() * surNames.length)];
+      document.getElementById('randomName').value = `${firstName} ${surName}`;
+    }
 
 
 
@@ -317,15 +831,26 @@
       cursor: pointer;
     }
 
+    .none-color {
+      border: 1px dashed #ccc;
+    }
+
     .selected {
       border: 5px solid #f00;
     }
   </style>
-<div id="alertPlaceHolder"></div>
-  <button class="btn btn-primary mt-3" onclick="generateImage()">Generate Image</button>
-  
-  <div id="imageContainer" class="mt-3"></div>
+
+  <div id="alertPlaceHolder"></div>
+  <div class="d-flex justify-content-center">
+    <button class="btn btn-primary mt-3 btn-lg" onclick="generateImage()">Generate Image</button>
   </div>
-  
+
+  <!-- Alert for generating image -->
+  <div id="imageAlert" class="alert alert-info" role="alert" style="display:none;">
+    Image is generating. Results will be available in the My creations section.
+  </div>
+  <div id="imageContainer" class="mt-3"></div>
+
+
 
 </main>

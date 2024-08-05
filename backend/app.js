@@ -1,3 +1,4 @@
+const config = require('./config');
 const express = require('express');
 const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
@@ -17,10 +18,35 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { sendVerificationEmail } = require('./mailer');
 const { check, validationResult } = require('express-validator');
+const stripe = require('stripe')(config.stripe.secretKey);
+
 require('dotenv').config();
 
 
 const app = express();
+
+app.post('/stripe_webhook', bodyParser.raw({type: 'application/json'}), async (request, response) => {
+    const payload = request.body;
+    const sig = request.headers['stripe-signature'];
+  
+    let event;
+  
+    try {
+      event = stripe.webhooks.constructEvent(payload, sig, config.stripe.webhookSecret);
+    } catch (err) {
+      return response.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  
+    if (
+      event.type === 'checkout.session.completed'
+      || event.type === 'checkout.session.async_payment_succeeded'
+    ) {
+      fulfillCheckout(event.data.object.id);
+    }
+  
+    response.status(200).end();
+  });
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -149,6 +175,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/gallery', express.static(path.join(__dirname, 'gallery')));
 app.use('/thumbnails', express.static(path.join(__dirname, 'thumbnails')));
+app.use(express.static(path.join(__dirname, '../slideshows')));
 
 
 // Google OAuth strategy
@@ -524,9 +551,29 @@ app.post('/generateImage', isAuthenticated, hasEnoughCredits, async (req, res) =
         const hairColor = requestBody.hairColor;
         const eyeColor = requestBody.eyeColor;
         const waifuName = requestBody.waifuName;
+        const fullClothes = requestBody.fullClothes;
+        const upperBodyClothes = requestBody.upperBodyClothes;
+        const lowerBodyClothes = requestBody.lowerBodyClothes;
+        const onePieceClothesColor = requestBody.onePieceClothesColor;
+        const upperClothesColor = requestBody.upperClothesColor;
+        const lowerClothesColor = requestBody.lowerClothesColor;
+
+        //mount clothes subquery
+        var clothesSubquery = "";
+        if (fullClothes !="")
+            clothesSubquery = fullClothes;
+        if (onePieceClothesColor != '')
+            clothesSubquery = '((' + onePieceClothesColor + ' ' + clothesSubquery + '))';
+
+        if (upperBodyClothes !="")
+            clothesSubquery =  '((' + upperClothesColor + ' ' + upperBodyClothes + ')), ';
+
+        if (lowerBodyClothes !="")
+            clothesSubquery += '((' + lowerClothesColor + ' ' + lowerBodyClothes + '))';
+        
 
         // var prompt = "masterpiece, best quality, 1girl, " + age + ", " + bodyShape + ", " + breastSize + ", " + expression + ", " + eyeColor + ", " + hairColor + ", " + hairLength + ", " + hairType + ", white shirt, black skirt";
-        var prompt = "masterpiece, best quality, 1girl, " + age + ", " + bodyShape + ", " + breastSize + ", " + expression + ", " + eyeColor + ", " + hairColor + ", " + hairLength + ", " + hairType;
+        var prompt = "masterpiece, best quality, 1girl, " + age + ", " + bodyShape + ", " + breastSize + ", " + expression + ", " + eyeColor + ", " + hairColor + ", " + hairLength + ", " + hairType + ", " + clothesSubquery;
         var negative_prompt = "disfigured, 3D, cgi, extra limbs, bad quality, poor quality";
         var model = "dark-sushi-mix-v2-25";
         //var model = "animagine-xl-v-3-1";
@@ -615,8 +662,8 @@ app.post('/generateImage', isAuthenticated, hasEnoughCredits, async (req, res) =
         // Store the file path or URL in the database
 
         db.run(
-            'INSERT INTO creations (userId, imageUrl, thumbnailUrl, public, creationTime, model, prompt, negative_prompt, imageWidth, imageHeight, scheduler, steps, guidance, seed, cost, WaifuName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [req.user.id, imageUrl, thumbnailUrl, 1, new Date().toISOString(), "dark-sushi-mix-v2-25", prompt, negative_prompt, width, height, scheduler, steps, guidance, seed, cost, waifuName],
+            'INSERT INTO creations (userId, imageUrl, thumbnailUrl, public, creationTime, model, prompt, negative_prompt, imageWidth, imageHeight, scheduler, steps, guidance, seed, cost, WaifuName, likes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [req.user.id, imageUrl, thumbnailUrl, 1, new Date().toISOString(), "dark-sushi-mix-v2-25", prompt, negative_prompt, width, height, scheduler, steps, guidance, seed, cost, waifuName, 0],
             function (err) {
                 if (err) {
                     console.error('Error inserting record:', err);
@@ -870,7 +917,153 @@ function updateLikes(res, newLikesValue,id) {
     });
 }
 
+app.post('/create-checkout-session', async (req, res) => {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          price: 'price_1PfiyRJYiYs0VE5ED8c8Hgpr',
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${process.env.BASE_URL}/success`,
+      cancel_url: `${process.env.BASE_URL}/cancel`,
+    });
+  
+    res.redirect(303, session.url);
+  });
+
+
+
+
+  async function fulfillCheckout(sessionId) {
+    // Set your secret key. Remember to switch to your live secret key in production.
+    // See your keys here: https://dashboard.stripe.com/apikeys
+    const stripe = require('stripe')(config.stripe.secretKey);
+  
+    console.log('Fulfilling Checkout Session ' + sessionId);
+  
+    // TODO: Make this function safe to run multiple times,
+    // even concurrently, with the same session ID
+  
+    // TODO: Make sure fulfillment hasn't already been
+    // peformed for this Checkout Session
+  
+    // Retrieve the Checkout Session from the API with line_items expanded
+    const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['line_items'],
+    });
+  
+    // Check the Checkout Session's payment_status property
+    // to determine if fulfillment should be peformed
+    if (checkoutSession.payment_status !== 'unpaid') {
+      // TODO: Perform fulfillment of the line items
+      console.log("TODO BIEN TOKENS PAGADOS Y RELLENO TODO!");
+  
+      // TODO: Record/save fulfillment status for this
+      // Checkout Session
+    }
+
+    console.log(checkoutSession);
+  }
+
+
+
+  // Route to fetch creations belonging to the current user
+app.get('/createSlideShow', (req, res) => {
+
+    var sortField = req.query.sortField || 'creationTime';
+    const sortOrder = req.query.sortOrder === 'asc' ? 'asc' : 'desc';
+
+
+    // Validate the sortField to prevent SQL injection
+    const validSortFields = ['creationTime', 'likes']; // Add all valid sort fields
+    if (!validSortFields.includes(sortField)) {
+        sortField = 'creationTime';
+    }
+
+    var query = '';
+    var param = '';
+    const isAuthenticated = req.isAuthenticated();
+
+    if (isAuthenticated){
+        param = req.user.id;
+        query = `SELECT *, (select count(*) > 0 from votes where creationId = c.id and voterId = ?) as isLiked FROM creations c WHERE public = 1 ORDER BY ${sortField} ${sortOrder}`;
+    }else{
+        param = 0;
+        query = `SELECT *, ? as isLiked FROM creations c WHERE public = 1 ORDER BY ${sortField} ${sortOrder}`;
+    }
+    console.info(query);
+
+    db.all(query,[param], (err, rows) => {
+        if (err) {
+            console.error('Error fetching creations:', err);
+            res.status(500).json({ error: 'An error occurred while fetching creations.' });
+        } else {
+            res.render('creationsGalleryContent', {
+                isAuthenticated: isAuthenticated, //req.isAuthenticated,
+                mainPartial: 'main-content-generateSlideShow',
+                activePage: 'createSlideShow',
+                creations: rows,
+                sortField: sortField,
+                sortOrder: sortOrder,
+                isMyCreation: false
+            });
+            //res.json(rows); // Send the array of creations as JSON response
+        }
+    });
+});
+
+
+
+// Define a route for generating an image
+app.post('/generate_slideshow', isAuthenticated, hasEnoughCredits, async (req, res) => {
+    try {
+
+        const { videoName, duration, fps, images } = req.body;
+
+        const callback_url = "http://localhost:3000/task-complete"
+
+
+        const baseURL = process.env.BASE_URL;
+        const updatedImages = images.map(image => `${baseURL}${image}`);
+
+        const data = {
+            videoName,
+            duration: parseInt(duration, 10),
+            fps: parseInt(fps, 10),
+            callback_url,
+            images: updatedImages
+        };
+        
+        const headers = {
+            'Content-Type': 'application/json', // Specify the content type as JSON
+            'Accept': '*/*'
+        };
+
+
+        // Make a POST request to the external API
+        const response = await axios.post('http://localhost:5000/generateSlideshow/', JSON.stringify(data), { headers });
+        //const response = await axios.post('https://api.getimg.ai/v1/stable-diffusion-xl/text-to-image', data, { headers });
+        // get the image as a base64 string
+        const jsonData = response.data;
+
+        // Send the image tag content as a response
+        res.send(jsonData);
+    } catch (error) {
+        // Handle errors
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: 'An error occurred while fetching data.' });
+    }
+
+});
+
+
+
 module.exports = app;
+
+
 
 
 
