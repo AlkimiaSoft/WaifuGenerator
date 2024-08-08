@@ -21,7 +21,8 @@
           <span class="fs-5 mb-5">Public creation</span>
         </div>
       <% } %>
-
+      <span class="fs-5 mb-5">Description:</span>
+      <p class="lead"><%= creations[0].description %></p>
       <span class="fs-5 mb-5">Prompt:</span>
       <p class="lead"><%= creations[0].prompt %></p>
       <span class="fs-5 mb-5">Negative prompt:</span>
@@ -39,7 +40,9 @@
       <span class="fs-5">Resolution</span>
       <p><%= creations[0].imageWidth %> x <%= creations[0].imageHeight %></p>
 
+      <a href="/chat/<%= creations[0].id %>" class="btn btn-primary ms-2">Chat</a>
       <% if (isAuthenticated && isMyCreation) { %>
+          
         <!-- Delete Button -->
         <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
           <i class="bi bi-trash"></i> Delete
@@ -70,31 +73,4 @@
   </div>
 </main>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var publicSwitch = document.getElementById('publicSwitch');
-    publicSwitch.addEventListener('change', function () {
-      var isChecked = this.checked;
-      var creationId = `<%= creations[0].id %>`;
 
-      // Make fetch request to backend
-      fetch('/updateCreationPublicStatus', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id: creationId, isPublic: isChecked })
-      })
-        .then(response => {
-          if (response.ok) {
-            console.log('Public status updated successfully');
-          } else {
-            console.error('Error updating public status:', response.statusText);
-          }
-        })
-        .catch(error => {
-          console.error('Error updating public status:', error);
-        });
-    });
-  });
-</script>

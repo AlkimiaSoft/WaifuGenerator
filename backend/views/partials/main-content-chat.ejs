@@ -1,0 +1,185 @@
+<style>
+  .chat-container {
+    height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chat-bubble {
+    max-width: 60%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 20px;
+  }
+
+  .chat-bubble.user {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+  }
+
+  .chat-bubble.ai {
+    background-color: #f1f1f1;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+  }
+
+  .chat-footer {
+    display: flex;
+    margin-top: 10px;
+  }
+
+  .chat-footer input {
+    flex: 1;
+    /* border-top-left-radius: 0;
+    border-bottom-left-radius: 0; */
+  }
+
+  .typing-indicator {
+    display: none;
+    align-self: flex-start;
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 20px;
+    font-style: italic;
+  }
+
+</style>
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+  <div class="d-flex pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="display-5 fw-bolder">
+      <%= creations[0].WaifuName %>
+    </h1>
+  </div>
+  <div class="row gx-4 gx-lg-5 align-items-center">
+    <div class="col-lg-6 mb-3">
+      <img class="img-fluid mb-5 mb-md-0" src="<%= creations[0].imageUrl %>" alt="Creation Image">
+    </div>
+    <div class="col-lg-6 col-md-12">
+      <!-- chat ui here -->
+      <!-- Chat UI here -->
+      <div class="chat-container d-flex flex-column">
+        <ul id="chat-messages" class="list-unstyled d-flex flex-column">
+          <!-- Loop through chat messages and display them -->
+          <% chat.forEach(function(message) { %>
+            <li class="chat-bubble <%= message.sender === 'user' ? 'user' : 'ai' %>">
+              <%= message.messageContent %>
+            </li>
+          <% }); %>
+        </ul>
+        <div id="typing-indicator" class="typing-indicator">Typing...</div>
+      </div>
+      <div class="chat-footer">
+        <input id="chat-input" type="text" class="form-control" placeholder="Type a message">
+        <button id="send-button" class="btn btn-primary ms-2">Send</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Deletion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this creation?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <form id="deleteForm" action="/creations/<%= creations[0].id %>/delete" method="POST">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script> -->
+<script>
+
+  // var socket = io();
+  var creationId = '<%= creations[0].id %>';
+
+  document.getElementById('send-button').addEventListener('click', function () {
+    sendMessage();
+  });
+
+      // Event listener for the Enter key
+      document.getElementById('chat-input').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default Enter key action (e.g., form submission)
+        sendMessage(); // Call the function to send the message
+      }
+    });
+
+  // socket.on('chat message', function (msg) {
+  //   addMessageToChat(msg, 'ai');
+  // });
+
+    // Function to generate a random delay between 500ms and 3000ms
+    function getRandomDelay() {
+    return Math.floor(Math.random() * (1500 - 200 + 1)) + 200;
+  }
+
+  // Sleep function
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async function sendMessage(){
+    const input = document.getElementById('chat-input');
+    const message = input.value;
+    
+    if (message.trim() !== '') {
+      addMessageToChat(message, 'user');
+      // Send the message to the server
+      //       socket.emit('chat message', message);
+      input.value = '';
+      // Show typing indicator
+      await sleep(getRandomDelay());
+      document.getElementById('typing-indicator').style.display = 'block';
+      fetch(`/chat/${creationId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message })
+      }).then(response => response.json())
+        .then(data => {
+          // Append the new message to the chat
+          // Hide typing indicator
+          document.getElementById('typing-indicator').style.display = 'none';
+          addMessageToChat(data.answer,'ai') //TODO Get name from waifu
+          // Clear the input
+        });
+    }
+  }
+  function addMessageToChat(message, type) {
+    const messageList = document.getElementById('chat-messages');
+    const newMessage = document.createElement('li');
+    newMessage.textContent = message;
+    newMessage.classList.add('chat-bubble', type);
+    messageList.appendChild(newMessage);
+    //messageList.scrollTop = messageList.scrollHeight;
+
+    // Ensure the chat container scrolls to the bottom
+    const chatContainer = document.querySelector('.chat-container');
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+
+
+
+</script>

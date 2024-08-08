@@ -25,27 +25,27 @@ require('dotenv').config();
 
 const app = express();
 
-app.post('/stripe_webhook', bodyParser.raw({type: 'application/json'}), async (request, response) => {
+app.post('/stripe_webhook', bodyParser.raw({ type: 'application/json' }), async (request, response) => {
     const payload = request.body;
     const sig = request.headers['stripe-signature'];
-  
+
     let event;
-  
+
     try {
-      event = stripe.webhooks.constructEvent(payload, sig, config.stripe.webhookSecret);
+        event = stripe.webhooks.constructEvent(payload, sig, config.stripe.webhookSecret);
     } catch (err) {
-      return response.status(400).send(`Webhook Error: ${err.message}`);
+        return response.status(400).send(`Webhook Error: ${err.message}`);
     }
-  
+
     if (
-      event.type === 'checkout.session.completed'
-      || event.type === 'checkout.session.async_payment_succeeded'
+        event.type === 'checkout.session.completed'
+        || event.type === 'checkout.session.async_payment_succeeded'
     ) {
-      fulfillCheckout(event.data.object.id);
+        fulfillCheckout(event.data.object.id);
     }
-  
+
     response.status(200).end();
-  });
+});
 
 
 // Middleware
@@ -119,6 +119,32 @@ db.run(`CREATE TABLE IF NOT EXISTS votes (
         console.error('Error creating votes table:', err.message);
     } else {
         console.log('Votes table created successfully');
+    }
+});
+
+// db.run(`CREATE TABLE IF NOT EXISTS chats (
+//     id TEXT PRIMARY KEY,
+//     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+//   )`, (err) => {
+//     if (err) {
+//         console.error('Error creating chats table:', err.message);
+//     } else {
+//         console.log('Chat table created successfully');
+//     }
+// });
+
+//foreign key per chatcontent si creem la taula chat
+//FOREIGN KEY(chatId) REFERENCES chats(id)
+db.run(`CREATE TABLE IF NOT EXISTS chatContent (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    chatId TEXT,
+    messageContent TEXT,
+    sender TEXT
+  )`, (err) => {
+    if (err) {
+        console.error('Error creating chatContent table:', err.message);
+    } else {
+        console.log('chatContent table created successfully');
     }
 });
 
@@ -560,17 +586,17 @@ app.post('/generateImage', isAuthenticated, hasEnoughCredits, async (req, res) =
 
         //mount clothes subquery
         var clothesSubquery = "";
-        if (fullClothes !="")
+        if (fullClothes != "")
             clothesSubquery = fullClothes;
         if (onePieceClothesColor != '')
             clothesSubquery = '((' + onePieceClothesColor + ' ' + clothesSubquery + '))';
 
-        if (upperBodyClothes !="")
-            clothesSubquery =  '((' + upperClothesColor + ' ' + upperBodyClothes + ')), ';
+        if (upperBodyClothes != "")
+            clothesSubquery = '((' + upperClothesColor + ' ' + upperBodyClothes + ')), ';
 
-        if (lowerBodyClothes !="")
+        if (lowerBodyClothes != "")
             clothesSubquery += '((' + lowerClothesColor + ' ' + lowerBodyClothes + '))';
-        
+
 
         // var prompt = "masterpiece, best quality, 1girl, " + age + ", " + bodyShape + ", " + breastSize + ", " + expression + ", " + eyeColor + ", " + hairColor + ", " + hairLength + ", " + hairType + ", white shirt, black skirt";
         var prompt = "masterpiece, best quality, 1girl, " + age + ", " + bodyShape + ", " + breastSize + ", " + expression + ", " + eyeColor + ", " + hairColor + ", " + hairLength + ", " + hairType + ", " + clothesSubquery;
@@ -586,7 +612,7 @@ app.post('/generateImage', isAuthenticated, hasEnoughCredits, async (req, res) =
         // Define the request headers with the Bearer authorization token
         const apiKey = process.env.IMG_API_KEY;
         var bearerToken = 'Bearer ' + apiKey;
-        const headers = {
+        var headers = {
             'Authorization': bearerToken,
             'Content-Type': 'application/json', // Specify the content type as JSON
             'Accept': '*/*'
@@ -659,18 +685,44 @@ app.post('/generateImage', isAuthenticated, hasEnoughCredits, async (req, res) =
             });
 
 
-        // Store the file path or URL in the database
 
+
+        // Store the file path or URL in the database
         db.run(
             'INSERT INTO creations (userId, imageUrl, thumbnailUrl, public, creationTime, model, prompt, negative_prompt, imageWidth, imageHeight, scheduler, steps, guidance, seed, cost, WaifuName, likes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [req.user.id, imageUrl, thumbnailUrl, 1, new Date().toISOString(), "dark-sushi-mix-v2-25", prompt, negative_prompt, width, height, scheduler, steps, guidance, seed, cost, waifuName, 0],
-            function (err) {
+            async function (err) {
                 if (err) {
                     console.error('Error inserting record:', err);
                     //res.status(500).json({ error: 'An error occurred while inserting record.' });
                 } else {
                     console.log('Record inserted with ID:', this.lastID);
-                    //res.status(200).json({ message: 'Record inserted successfully.' });
+
+                    //Get the image nice description from an LLM endpoint
+                    //Let's call it async
+                    try {
+                        const callback_url = process.env.BASE_URL + '/creation_description_complete';
+                        headers = {
+                            'Content-Type': 'application/json', // Specify the content type as JSON
+                            'Accept': '*/*'
+                        };
+
+                        const pyData = {
+                            creationId: this.lastID,
+                            name: waifuName,
+                            prompt: prompt,
+                            imgUrl: 'test',
+                            callback_url: callback_url
+                        }
+                        // Make a POST request to the external API
+                        const pyResponse = await axios.post('http://localhost:5000/getCreationDescription/', JSON.stringify(pyData), { headers });
+                        const pyJsonData = pyResponse.data;
+                    } catch (error) {
+                        // Handle errors
+                        console.error('Error fetching data:', error);
+                        res.status(500).json({ error: 'An error occurred while fetching data.' });
+                    }
+
                 }
             }
         );
@@ -741,16 +793,16 @@ app.get('/gallery', (req, res) => {
     var param = '';
     const isAuthenticated = req.isAuthenticated();
 
-    if (isAuthenticated){
+    if (isAuthenticated) {
         param = req.user.id;
         query = `SELECT *, (select count(*) > 0 from votes where creationId = c.id and voterId = ?) as isLiked FROM creations c WHERE public = 1 ORDER BY ${sortField} ${sortOrder}`;
-    }else{
+    } else {
         param = 0;
         query = `SELECT *, ? as isLiked FROM creations c WHERE public = 1 ORDER BY ${sortField} ${sortOrder}`;
     }
     console.info(query);
 
-    db.all(query,[param], (err, rows) => {
+    db.all(query, [param], (err, rows) => {
         if (err) {
             console.error('Error fetching creations:', err);
             res.status(500).json({ error: 'An error occurred while fetching creations.' });
@@ -870,7 +922,7 @@ app.post('/likeCreation', isAuthenticated, (req, res) => {
                             res.status(500).json({ error: err });
                         } else {
                             newLikesValue = creation.likes + 1;
-                            updateLikes(res,newLikesValue,id);
+                            updateLikes(res, newLikesValue, id);
                         }
 
 
@@ -883,7 +935,7 @@ app.post('/likeCreation', isAuthenticated, (req, res) => {
                             res.status(500).json({ error: err });
                         } else {
                             newLikesValue = creation.likes - 1;
-                            updateLikes(res,newLikesValue,id);
+                            updateLikes(res, newLikesValue, id);
                         }
 
 
@@ -897,7 +949,7 @@ app.post('/likeCreation', isAuthenticated, (req, res) => {
 
 });
 
-function updateLikes(res, newLikesValue,id) {
+function updateLikes(res, newLikesValue, id) {
     db.run('UPDATE creations SET likes = ? WHERE id = ?', [newLikesValue, id], (error, result) => {
         if (error) {
             console.error('Error updating likes:', error);
@@ -919,58 +971,58 @@ function updateLikes(res, newLikesValue,id) {
 
 app.post('/create-checkout-session', async (req, res) => {
     const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: 'price_1PfiyRJYiYs0VE5ED8c8Hgpr',
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `${process.env.BASE_URL}/success`,
-      cancel_url: `${process.env.BASE_URL}/cancel`,
+        line_items: [
+            {
+                // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                price: 'price_1PfiyRJYiYs0VE5ED8c8Hgpr',
+                quantity: 1,
+            },
+        ],
+        mode: 'payment',
+        success_url: `${process.env.BASE_URL}/success`,
+        cancel_url: `${process.env.BASE_URL}/cancel`,
     });
-  
+
     res.redirect(303, session.url);
-  });
+});
 
 
 
 
-  async function fulfillCheckout(sessionId) {
+async function fulfillCheckout(sessionId) {
     // Set your secret key. Remember to switch to your live secret key in production.
     // See your keys here: https://dashboard.stripe.com/apikeys
     const stripe = require('stripe')(config.stripe.secretKey);
-  
+
     console.log('Fulfilling Checkout Session ' + sessionId);
-  
+
     // TODO: Make this function safe to run multiple times,
     // even concurrently, with the same session ID
-  
+
     // TODO: Make sure fulfillment hasn't already been
     // peformed for this Checkout Session
-  
+
     // Retrieve the Checkout Session from the API with line_items expanded
     const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
-      expand: ['line_items'],
+        expand: ['line_items'],
     });
-  
+
     // Check the Checkout Session's payment_status property
     // to determine if fulfillment should be peformed
     if (checkoutSession.payment_status !== 'unpaid') {
-      // TODO: Perform fulfillment of the line items
-      console.log("TODO BIEN TOKENS PAGADOS Y RELLENO TODO!");
-  
-      // TODO: Record/save fulfillment status for this
-      // Checkout Session
+        // TODO: Perform fulfillment of the line items
+        console.log("TODO BIEN TOKENS PAGADOS Y RELLENO TODO!");
+
+        // TODO: Record/save fulfillment status for this
+        // Checkout Session
     }
 
     console.log(checkoutSession);
-  }
+}
 
 
 
-  // Route to fetch creations belonging to the current user
+// Route to fetch creations belonging to the current user
 app.get('/createSlideShow', (req, res) => {
 
     var sortField = req.query.sortField || 'creationTime';
@@ -987,16 +1039,16 @@ app.get('/createSlideShow', (req, res) => {
     var param = '';
     const isAuthenticated = req.isAuthenticated();
 
-    if (isAuthenticated){
+    if (isAuthenticated) {
         param = req.user.id;
         query = `SELECT *, (select count(*) > 0 from votes where creationId = c.id and voterId = ?) as isLiked FROM creations c WHERE public = 1 ORDER BY ${sortField} ${sortOrder}`;
-    }else{
+    } else {
         param = 0;
         query = `SELECT *, ? as isLiked FROM creations c WHERE public = 1 ORDER BY ${sortField} ${sortOrder}`;
     }
     console.info(query);
 
-    db.all(query,[param], (err, rows) => {
+    db.all(query, [param], (err, rows) => {
         if (err) {
             console.error('Error fetching creations:', err);
             res.status(500).json({ error: 'An error occurred while fetching creations.' });
@@ -1036,7 +1088,7 @@ app.post('/generate_slideshow', isAuthenticated, hasEnoughCredits, async (req, r
             callback_url,
             images: updatedImages
         };
-        
+
         const headers = {
             'Content-Type': 'application/json', // Specify the content type as JSON
             'Accept': '*/*'
@@ -1060,6 +1112,122 @@ app.post('/generate_slideshow', isAuthenticated, hasEnoughCredits, async (req, r
 });
 
 
+
+// Route to render the chat page
+app.get('/chat/:id', isAuthenticated, (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.id;
+        const chatId = userId + "-" + id;
+
+        const isAuthenticated = req.isAuthenticated();
+
+        const query = 'SELECT * FROM creations WHERE id = ? AND (userId = ? OR public = 1)';
+
+        db.all(query, [id, userId], (err, rows) => {
+            if (err) {
+                console.error('Error fetching creations:', err);
+                res.status(500).json({ error: 'An error occurred while fetching creations.' });
+            } else {
+                if (rows.length > 0) {
+                    //retrieve chat history
+                    // Fetch the newly created user
+                    db.all(`SELECT * FROM chatContent WHERE chatId = ?`, [chatId], (err, chat) => {
+                        if (err) {
+                            return res.status(500).send('Error retrieving chat content');
+                        }
+
+                        const isMyCreation = userId == rows[0].userId;
+                        res.render('creationChatContent', {
+                            isAuthenticated: isAuthenticated,
+                            mainPartial: 'main-content-chat',
+                            activePage: 'chat',
+                            creations: rows,
+                            sortField: '',
+                            sortOrder: '',
+                            isMyCreation: isMyCreation,
+                            chat: chat
+                        });
+
+
+                    });
+
+                } else {
+                    res.status(404).json({ error: 'The resource was not found. The requested creation does not exist or it does not belong to you and it is not made public.' });
+                }
+
+                //res.json(rows); // Send the array of creations as JSON response
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching creation information:', error);
+        res.status(500).send('Error fetching creation information');
+    }
+});
+
+// Sleep function
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Chat route
+app.post('/chat/:id', isAuthenticated, async (req, res) => {
+    const message = req.body.message;
+    const { id } = req.params;
+    const userId = req.user.id;
+    const chatId = userId + "-" + id;
+    var sender = 'user'
+    // Here you can process the message, save it to a database, etc.    
+    //Save user message into database
+    db.run('INSERT INTO chatContent (chatId, messageContent, sender) VALUES (?, ?, ?)'
+        , [chatId, message, sender]
+        , async (err) => {
+            if (err) {
+                return res.status(500).send('Error storing chat content');
+            }
+            //Get answer
+            answer = await obtainMessageFromAgent(message);
+            sender = 'ai'
+            //save ai message into database
+            db.run('INSERT INTO chatContent (chatId, messageContent, sender) VALUES (?, ?, ?)'
+                , [chatId, answer, sender]
+                , (err) => {
+                    if (err) {
+                        return res.status(500).send('Error storing chat answer');
+                    }
+                    res.json({ answer });
+
+                });
+        });
+
+
+});
+
+
+
+async function obtainMessageFromAgent(message) {
+    await sleep(5000);
+    return "i agree with u";
+}
+
+app.post('/creation_description_complete', (req, res) => {
+    const creationId = req.body.creationId
+    const answer = req.body.answer
+
+    //Add the description to the creation
+    //UPDATE users SET remainingCreations = ? WHERE id = ?
+    db.run('UPDATE creations SET description = ? where id = ?'
+                , [answer, creationId]
+                , (err) => {
+                    if (err) {
+                        return res.status(500).send('Error storing description');
+                    }
+                    res.json({ answer });
+
+                });
+
+});
 
 module.exports = app;
 
